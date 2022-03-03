@@ -1,0 +1,91 @@
+<body class="home-bg">
+    <div class="p-grid card page-content border-color">
+        <div class="p-col-12 p-md-12 p-lg-12 no-pad">
+            <app-topbar></app-topbar>
+        </div>
+        <div class="p-col-12 p-md-12 p-lg-12 card" style="min-height: 485px;">
+            <p-toast position="top-center" key="msgKey"></p-toast>
+            <p-panel>
+                <p-header>
+                    <div class="p-col-12 p-md-12 p-lg-12 no-pad-top">Incident Details Report</div>
+                </p-header>
+                <div class="p-col-12 no-pad-top">** view incident details by region wise **</div>
+                <div class="p-col-12 border-color card">
+                    <form #f="ngForm" name="fields">
+                        <div class="p-grid">
+                            <div class="p-col-12 p-md-4 p-lg-2" style="padding-left: 15px;">
+                                <div>
+                                    <label for="rname" class="label-text-color">RM Office:</label>
+                                </div>
+                                <p-dropdown #reg name="rname" [options]="regionOptions"
+                                    [style]="{'width':'-webkit-fill-available'}" [(ngModel)]="rcode"
+                                    (onClick)="onSelect('R')" (ngModelChange)="onChange('RM')" filter="true"
+                                    resetFilterOnHide="true" filterMatchMode="startsWith" required>
+                                    <ng-template let-item pTemplate="selectedItem">
+                                        <span style="vertical-align:middle">{{item.label}}</span>
+                                    </ng-template>
+                                </p-dropdown>
+                            </div>
+                            <div class="p-col-12 p-md-4 p-lg-2">
+                                <div>
+                                    <label for="dname" class="label-text-color">DM Office:</label>
+                                </div>
+                                <p-dropdown #dist name="dname" [options]="districtOptions"
+                                    [style]="{'width':'-webkit-fill-available'}" [(ngModel)]="dcode"
+                                    (onClick)="onSelect('D')" filter="true" resetFilterOnHide="true"
+                                    filterMatchMode="startsWith" (ngModelChange)="onChange('DM')" required>
+                                    <ng-template let-item pTemplate="selectedItem">
+                                        <span style="vertical-align:middle">{{item.label}}</span>
+                                    </ng-template>
+                                </p-dropdown>
+                            </div>
+                            <div class="p-col-12 p-md-4 p-lg-2">
+                                <div>
+                                    <label class="label-text-color" for="shopcd">From Date:</label>
+                                </div>
+                                <p-calendar name="fDate" [maxDate]="maxDate" dateFormat="dd/mm/yy"
+                                    [(ngModel)]="fromDate" [showIcon]="true" (ngModelChange)="onChange('DA')">
+                                </p-calendar>
+                            </div>
+                            <div class="p-col-12 p-md-4 p-lg-2">
+                                <div>
+                                    <label class="label-text-color" for="shopcd">To Date:</label>
+                                </div>
+                                <p-calendar name="tDate" [maxDate]="maxDate" dateFormat="dd/mm/yy" [(ngModel)]="toDate"
+                                    [showIcon]="true" (ngModelChange)="onChange('DA')">
+                                </p-calendar>
+                            </div>
+                            <div class="p-col-2"></div>
+                            <div class="p-col-12 p-md-3 p-lg-1 txt-align" style="margin-top: 25px;">
+                                <p-splitButton label="Download" icon="pi pi-download"
+                                    [disabled]="(incidentData.length==0)" [model]="items"></p-splitButton>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="p-col-12 p-md-12 p-lg-12 no-pad-top">
+                        <p-table #dt styleClass="p-datatable-gridlines" [columns]="incidentCols" [value]="incidentData"
+                            [rows]="50" [rowsPerPageOptions]="[10,20,30,40,50,100]" [paginator]="true"
+                            [responsive]="true" autoLayout="true" [loading]="loading"
+                            exportFilename="INCIDENT_DETAILS_REPORT">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr style="text-align: center;">
+                                    <th *ngFor="let col of columns">
+                                        {{col.header}}
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+                                <tr>
+                                    <td *ngFor="let col of columns">
+                                        {{rowData[col.field]}}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </p-panel>
+        </div>
+    </div>
+    <app-footer></app-footer>
+</body>

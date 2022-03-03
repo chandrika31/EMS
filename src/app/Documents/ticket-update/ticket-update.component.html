@@ -1,0 +1,150 @@
+<body #body class="home-bg">
+    <p-blockUI [blocked]="blockScreen">
+        <p-progressSpinner class="spinner" strokeWidth="4" *ngIf="blockScreen"></p-progressSpinner>
+    </p-blockUI>
+    <div class="p-grid card page-content border-color">
+        <div class="p-col-12 p-md-12 p-lg-12 no-pad">
+            <app-topbar></app-topbar>
+        </div>
+        <div class="p-col-12 p-md-12 p-lg-12 border-color" style="min-height:69vh;">
+            <div>
+                <p-panel>
+                    <p-header>
+                        <div class="ui-g-12 ui-md-8 ui-g panel-header">Update Ticket
+                        </div>
+                    </p-header>
+                    <p-toast position="top-center" key="t-err"></p-toast>
+                    <div class="p-col-12 p-md-12 p-lg-12 no-pad">
+                        <div class="p-col-12 no-pad-top">
+                            **Please select the ticket to update**
+                        </div>
+                        <p-table #dt styleClass="p-datatable-gridlines p-datatable-sm" [columns]="TicketReportCols"
+                            [value]="TicketReportData" [rows]="50" [rowsPerPageOptions]="[10,20,30,40,50,100]"
+                            [paginator]="true" [responsive]="true" autoLayout="true" [loading]="loading"
+                            [(selection)]="selected" selectionMode="single" (onRowSelect)="onRowSelect($event)"
+                            exportFilename="MY_TICKET_REPORT" sortMode="multiple"
+                            [globalFilterFields]="['TicketID','ComponentName','Assignee','Status']">
+                            <ng-template pTemplate="caption">
+                                <div class="p-d-flex">
+                                    <span style="align-self: center;"> ** search any ticket by entering Ticket id /
+                                        Component / Status / Asignee in
+                                        search box **</span>
+                                    <span class="p-input-icon-left p-ml-auto">
+                                        <i class="pi pi-search"></i>
+                                        <input pInputText type="text"
+                                            (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                            placeholder="Search keyword" />
+                                    </span>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="header" let-columns>
+                                <tr style="text-align: center;">
+                                    <th>S.No</th>
+                                    <th *ngFor="let col of columns" pSortableColumn="{{col.field}}">
+                                        {{col.header}}
+                                        <p-sortIcon field="{{col.field}}">
+                                        </p-sortIcon>
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+                                <tr [pSelectableRow]="rowData">
+                                    <td>{{rowIndex + 1 | number}}</td>
+                                    <td *ngFor="let col of columns">
+                                        {{rowData[col.field]}}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div><br />
+                    <div class="p-col-12" style="font-size: 15px;">
+                        <span style="text-decoration:underline;"> Points to note:
+                        </span><br />
+                        * User can change the Status of the ticket<br />
+                        * User can enter the ticket description<br />
+                        * User can mention the Multiple mail id with comma separator’s in CC<br />
+                    </div>
+                </p-panel>
+            </div>
+
+            <p-dialog #dialog header="{{dialogHeader}}" [(visible)]="showDialog"
+                [style]="{width: '90vw' , height: '80vw'}" [modal]="true" [resizable]="true" [baseZIndex]="10000"
+                [closable]="true" [maximizable]="true" icon="pi pi-exclamation-triangle" [appendTo]="body">
+                <div class="p-col-12 p-md-12 p-lg-12 card border-color margin-gap-layout">
+                    <p-toast position="top-center" key="t-err"></p-toast>
+                    <!-- <div style="float: right;">
+                        <button pButton type="submit" label="Back" class="p-button-raised p-btn-pad bg-div" icon=""
+                            iconPos="right" (click)="onBack()"></button>
+                    </div> -->
+                    <div class="p-col-12 p-md-12 p-lg-12 no-pad-top">
+                        <div class="p-col-12 p-md-4 p-lg-3">
+                            <div>
+                                <label for="status" class="label-text-color">Status<span
+                                        class="form-mandatory-field">*</span></label>
+                            </div>
+                            <p-dropdown #status name="status" [options]="StatusOptions"
+                                [style]="{'width':'-webkit-fill-available'}" [(ngModel)]="Status" filter="true"
+                                (onClick)="onSelect('Status')" resetFilterOnHide="true" optionLabel="label"
+                                filterMatchMode="startsWith" required>
+                                <ng-template let-item pTemplate="selectedItem">
+                                    <span style="vertical-align:middle">{{item.label}}</span>
+                                </ng-template>
+                            </p-dropdown>
+                        </div>
+                        <div style="padding-top: 2vh" class="p-col-12 p-md-4 p-lg-3">
+                            <span class="p-float-label">
+                                <input class="p-col-12" id="float-input" size="30" pInputText [(ngModel)]="Assignee"
+                                    type="text" autocomplete="off" tabindex="3">
+                                <label for="float-input">Assignee<span class="form-mandatory-field">*</span></label>
+                            </span>
+                        </div>
+                        <div style="padding-top: 2vh" class="p-col-12 p-md-4 p-lg-3">
+                            <div class="p-float-label">
+                                <input class="p-col-12" id="float-input" size="30" pInputText [(ngModel)]="DefaultCC"
+                                    type="text" autocomplete="off" tabindex="3">
+                                <label for="float-input">Default CC (optional)</label>
+                            </div>
+                        </div>
+                        <div style="padding-top: 2vh" class="p-col-12 p-md-4 p-lg-3">
+                            <div class="p-float-label">
+                                <input class="p-col-12" id="float-input" size="30" pInputText [(ngModel)]="Subject"
+                                    type="text" autocomplete="off" tabindex="3">
+                                <label for="float-input">Subject<span class="form-mandatory-field">*</span></label>
+                            </div>
+                        </div>
+                        <div style="padding-top: 2vh" class="p-col-12 p-md-4 p-lg-3">
+                            <div class="p-float-label">
+                                <textarea [(ngModel)]="TicketDescription" rows="5" cols="100" pInputTextarea></textarea>
+                                <label for="float-input">Add Ticket Description<span
+                                        class="form-mandatory-field">*</span></label>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-4 p-lg-2">
+                            <button pButton type="submit" label="Save" class="p-button-raised p-btn-pad bg-div" icon=""
+                                iconPos="right" (click)="onSave()"></button>
+                        </div>
+                    </div>
+
+                    <div>Previous Comments for the ticket - {{TicketID}}</div>
+                    <p-table #tbl styleClass="p-datatable-gridlines p-datatable-sm" [columns]="TDCols" [value]="TD"
+                        [rows]="60" [responsive]="true" autoLayout="true" [loading]="loading" [(selection)]="selected"
+                        selectionMode="single" exportFilename="MY_TICKET_DESCRIPTIONS" border:none>
+                        <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+                            <tr [pSelectableRow]="rowData">
+                                <td *ngFor="let col of columns">
+                                    <div style="color: rgb(7, 73, 160);">
+                                        {{reporter}} posted on {{rowData.ticketTime}}
+                                    </div>
+                                    <div class="ticketdesc">
+                                        {{rowData.description}}
+                                    </div>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </p-dialog>
+        </div>
+    </div>
+    <app-footer></app-footer>
+</body>

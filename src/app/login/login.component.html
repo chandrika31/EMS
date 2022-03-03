@@ -1,0 +1,114 @@
+<body class="login-body">
+    <div class="p-grid">
+        <div class="p-col-12 p-md-12 p-lg-12">
+            <div *ngIf="clickedReset" style="margin-top: 10px; margin-left: 10px;"> <button pButton type="button"
+                    icon="pi pi-arrow-left" (click)="clickedReset=false"></button></div>
+            <div class="login-container">
+                <div class="login-content">
+                    <div *ngIf="!clickedReset">
+                        <p-toast position="top-center" key="t-err"></p-toast>
+                        <div class="p-grid login-card border-color">
+                            <div class="p-col-12 p-md-12 p-lg-12 login-bar">
+                                <div class="no-pad-top p-grid" style="display: inherit !important;">
+                                    <img href="#default" class="logo no-pad-top"
+                                        src="https://hms.cctv.tasmac.co.in/ems-app/assets/images/header/tasmac-transparent.png"
+                                        alt="logo" style="padding-right: initial;margin-top: -12%;
+                                   width: 185px;
+                                  margin-bottom: -12%;" />
+                                </div>
+                                <span style="margin-top: 5px;">EMS - USER LOGIN</span>
+                            </div>
+                            <div class="p-col-12 p-md-12 p-lg-12" style="background: whitesmoke;">
+                                <div class="p-col-12 p-md-12 p-lg-12 txt-align">
+                                    <form (ngSubmit)="onSubmit()" [formGroup]="loginForm">
+                                        <div class="p-col-12 p-md-12 p-lg-12">
+                                            <label for="uname" class="label-text-color" style="float: left;">Username <i
+                                                    class="fa fa-user-circle-o" style="font-size: 1rem;"
+                                                    aria-hidden="true"></i></label>
+                                            <input type="text" class="p-col-12 p-md-12 p-lg-12" name="uname" id="user"
+                                                formControlName="user" pInputText [(ngModel)]="username" minlength="1"
+                                                maxlength="30" autocomplete="off" autocomplete="off" required />
+                                        </div>
+                                        <div class="p-col-12 p-md-12 p-lg-12">
+                                            <label class="label-text-color" for="pwd" style="float: left;">Password
+                                                <i class="fa fa-lock" style="font-size: 1rem;" aria-hidden="true"></i>
+                                            </label>
+                                            <div class="p-col-12 p-md-12 p-lg-12 no-pad">
+                                                <span class="p-col-12 no-pad p-input-icon-right">
+                                                    <i *ngIf="!showPswd" disabled class="pi pi-eye"
+                                                        style="margin-left: -10px;color: black;" (click)="onShowPswd()"
+                                                        aria-hidden="true"></i>
+                                                    <i *ngIf="showPswd" class="pi pi-eye-slash"
+                                                        style="margin-left: -10px;color: black;" (click)="onShowPswd()"
+                                                        aria-hidden="true"></i>
+                                                    <input class="p-col-12" name="pwd" type="password" id="pswd"
+                                                        formControlName="pswd" pInputText [(ngModel)]="password"
+                                                        minlength="1" maxlength="10" autocomplete="off" required />
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <button pButton type="submit" label="Login"
+                                            class="p-button-raised p-btn-pad bg-div" icon="pi pi-sign-in"
+                                            iconPos="right" [disabled]="!loginForm.valid"></button>
+                                    </form>
+                                    <div class="p-col-12 p-md-12 p-lg-12 txt-align">
+                                        <div class="f-pwd-text cursor-pointer" (click)="openPwdReset()">Forgot password?
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div id="resetPwdPanel" *ngIf="clickedReset">
+                        <div class="p-grid login-card border-color">
+                            <div class="p-col-12 p-md-12 p-lg-12 login-bar">
+                                <div class="no-pad-top p-grid" style="display: inherit !important;">
+                                    <img href="#default" class="logo no-pad-top"
+                                        src="https://hms.cctv.tasmac.co.in/ems-app/assets/images/header/tasmac-transparent.png"
+                                        alt="logo" style="padding-right: initial;margin-top: -10%;
+                                   width: 150px;
+                                  margin-bottom: -10%;" />
+                                </div>
+                                <span>Forget Password ?</span>
+                            </div>
+                            <div class="p-col-12 p-md-12 p-lg-12" style="background: whitesmoke;">
+                                <div class="p-col-12 p-md-12 p-lg-12">
+                                    <form (ngSubmit)="onForgotPassword()" [formGroup]="pwdResetForm">
+                                        <div class="p-col-12 p-md-12 p-lg-12">
+                                            <div class="p-float-label margin-gap-layout">
+                                                <input type="text" class="p-col-12" id="float-input" size="30"
+                                                    pInputText formControlName="email" id="email" [(ngModel)]="emailId"
+                                                    filter="true" filterMatchMode="startsWith" tabindex="0" required>
+                                                <label for="float-input">Mail Id:</label>
+                                            </div>
+                                            <!-- <div class="label-text-color">
+                                                    <label for="newPwd">Mail Id:</label>
+                                                </div>
+                                                <div class="no-pad-top">
+                                                    <input class="p-col-12 no-pad-top" type="email" id="email"
+                                                        formControlName="email" pInputText [(ngModel)]="emailId"
+                                                        minlength="10" maxlength="50" autocomplete="off" required />
+                                                </div> -->
+                                        </div>
+                                        <div class="txt-align" style="margin-top: 25px;">
+                                            <button pButton type="submit" label="Submit"
+                                                class="p-button-raised p-btn-pad bg-div"
+                                                [disabled]="!pwdResetForm.valid"></button>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<app-footer></app-footer>

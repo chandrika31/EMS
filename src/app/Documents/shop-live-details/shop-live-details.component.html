@@ -1,0 +1,197 @@
+<body #body class="home-bg">
+    <p-blockUI [blocked]="blockScreen">
+        <p-progressSpinner class="spinner" strokeWidth="4" *ngIf="blockScreen"></p-progressSpinner>
+    </p-blockUI>
+    <div class="p-grid card page-content border-color">
+        <div class="p-col-12 p-md-12 p-lg-12 no-pad">
+            <app-topbar></app-topbar>
+        </div>
+        <div class="p-col-12 p-md-12 p-lg-12 no-pad-top border-color" style="min-height:450px;">
+            <p-panel>
+                <p-header>
+                    <div class="ui-g panel-header">Camera Status Details
+                    </div>
+                </p-header>
+                <p-toast position="top-center" key="t-err"></p-toast>
+                <p style="text-align: center; margin-top: 0 !important;">
+                    <!-- Before submitting a Ticket, Please read the User manual document. Page No.6, Index: 4.1 -->
+                    ** Enter the shop camera status(active/inactive) with reason **
+                </p>
+                <form #f="ngForm" name="shopForm">
+                    <div class="p-grid card border-green" style="padding-left: 15px;">
+                        <div class="p-col-12 p-md-6 p-lg-2">
+                            <div>
+                                <label for="rname" class="label-text-color">Regional Office<span *ngIf="!disableRM"
+                                        class="form-mandatory-field">*</span></label>
+                            </div>
+                            <p-dropdown #reg name="rname" [options]="regionOptions"
+                                [style]="{'width':'-webkit-fill-available'}" [(ngModel)]="rcode"
+                                (onClick)="onSelect('RM')" (onChange)="onResetFields('RM')" filter="true"
+                                resetFilterOnHide="true" [disabled]="disableRM" filterMatchMode="startsWith"
+                                optionLabel="label" required>
+                                <ng-template let-item pTemplate="selectedItem">
+                                    <span style="vertical-align:middle">{{item.label}}</span>
+                                </ng-template>
+                            </p-dropdown>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-2">
+                            <div>
+                                <label for="dname" class="label-text-color">District Office<span *ngIf="!disableDM"
+                                        class="form-mandatory-field">*</span></label>
+                            </div>
+                            <p-dropdown #dist name="dname" [options]="districtOptions"
+                                [style]="{'width':'-webkit-fill-available'}" [(ngModel)]="dcode"
+                                (onClick)="onSelect('DM')" filter="true" resetFilterOnHide="true"
+                                filterMatchMode="startsWith" [disabled]="disableDM" optionLabel="label" required>
+                                <ng-template let-item pTemplate="selectedItem">
+                                    <span style="vertical-align:middle">{{item.label}}</span>
+                                </ng-template>
+                            </p-dropdown>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-2">
+                            <div>
+                                <label class="label-text-color" for="shop_no">Shop Number<span *ngIf="!disableSH"
+                                        class="form-mandatory-field">*</span></label>
+                            </div>
+                            <p-dropdown #shop name="shop_no" [options]="shopOptions"
+                                [style]="{'width':'-webkit-fill-available'}" [(ngModel)]="shopNo" filter="true"
+                                (onClick)="onSelect('SH')" resetFilterOnHide="true" filterMatchMode="startsWith"
+                                [disabled]="disableSH" optionLabel="label" required>
+                                <ng-template let-item pTemplate="selectedItem">
+                                    <span style="vertical-align:middle">{{item.label}}</span>
+                                </ng-template>
+                            </p-dropdown>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-2">
+                            <div>
+                                <label class="label-text-color" for="s_date">Start Date:<span
+                                        class="form-mandatory-field">*</span></label>
+                            </div>
+                            <p-calendar name="s_date" [maxDate]="maxDate" dateFormat="yy-mm-dd" [(ngModel)]="startDate"
+                                [showIcon]="true" required></p-calendar>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-2">
+                            <div>
+                                <label class="label-text-color" for="e_date">End Date:<span
+                                        class="form-mandatory-field">*</span></label>
+                            </div>
+                            <p-calendar name="e_date" [maxDate]="maxDate" dateFormat="yy-mm-dd" [(ngModel)]="endDate"
+                                [showIcon]="true" required></p-calendar>
+                            <div class="p-col-12 p-md-4 p-lg-1"></div>
+                        </div>
+                        <div class="p-col-12 p-md-4 p-lg-1"></div>
+                        <div class="p-col-12 p-md-4 p-lg-2">
+                            <div class="p-float-label">
+                                <input class="p-col-12" id="float-input" minlength="1" maxlength="2" pInputText
+                                    name="hrs" [(ngModel)]="hours" type="text" autocomplete="off" required>
+                                <label for="float-input">Hours:<span class="form-mandatory-field">*</span></label>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-4 p-lg-2 pad-left" style="margin-top: -22px;">
+                            <div>
+                                <label class="label-text-color" for="type">Camera Status:<span
+                                        class="form-mandatory-field">*</span></label>
+                            </div>
+                            <div class="border-grey">
+                                <div> &nbsp;
+                                    <p-radioButton name="cam_status" label="Active" value="1" [(ngModel)]="selectedType"
+                                        required>
+                                    </p-radioButton> &nbsp;&nbsp;
+                                    <p-radioButton name="cam_status" value="0" label="Inactive"
+                                        [(ngModel)]="selectedType" required>
+                                    </p-radioButton>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-12 p-lg-12" style="padding-top: 1rem;">
+                            <div class="p-float-label">
+                                <textarea id="float-input" name="remarks_text" [(ngModel)]="remarks" rows="3" cols="60"
+                                    pInputTextarea required></textarea>
+                                <label for="float-input">Remarks:<span class="form-mandatory-field">*</span></label>
+                            </div>
+                        </div>
+                        <div class="p-col-12">
+                            <div class="p-grid">
+                                <div class="p-col-12 p-md-6 p-lg-5"></div>
+                                <div class="p-col-6 p-md-4 p-lg-3 no-pad-top no-pad-right">
+                                    <button pButton type="submit" label={{btn_label}} class="p-button-raised p-btn-pad"
+                                        style="margin-right: 0.75rem;" [disabled]="(!f.valid)"
+                                        (click)="onSave(f)"></button>
+                                    <!-- </div> -->
+                                    <!-- <div class="p-col-6 p-md-4 p-lg-1 no-pad-top no-pad-right no-pad-left"> -->
+                                    <button pButton type="button" label="View" class="p-button-raised p-btn-pad"
+                                        style="margin-right: 0.75rem;" (click)="onView()"></button>
+                                    <!-- </div> -->
+                                    <!-- <div class="p-col-6 p-md-4 p-lg-1 no-pad-top no-pad-left"> -->
+                                    <button pButton type="button" label="Clear" style="margin-right: 0.75rem;"
+                                        class="p-button-raised p-btn-pad" (click)="onClear(f)"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <p-dialog #dialog header="Camera Active Status Details" [(visible)]="showDialog"
+                        [style]="{width: '90vw' , height: '80vw'}" [modal]="true" [resizable]="true"
+                        [baseZIndex]="10000" [closable]="true" [maximizable]="true" icon="pi pi-exclamation-triangle"
+                        [appendTo]="body">
+                        <div class="p-col-12 p-md-12 p-lg-12 card border-color margin-gap-layout" style="height:40vw;">
+                            <p-toast position="top-center" key="d-err"></p-toast>
+                            <div class="p-col-12 p-md-12 p-lg-12 no-pad-top">
+                                <div class="p-col-12 p-md-4 p-lg-3">
+                                    <div>
+                                        <label for="status" class="label-text-color">District:<span
+                                                class="form-mandatory-field">*</span></label>
+                                    </div>
+                                    <p-dropdown #district name="district" [options]="allDistrictOptions"
+                                        [style]="{'width':'-webkit-fill-available'}" [(ngModel)]="selectedDcode"
+                                        filter="true" (onClick)="onSelect('AD')" (onChange)="getCameraStatusDetails()"
+                                        resetFilterOnHide="true" optionLabel="label" filterMatchMode="startsWith"
+                                        required>
+                                        <ng-template let-item pTemplate="selectedItem">
+                                            <span style="vertical-align:middle">{{item.label}}</span>
+                                        </ng-template>
+                                    </p-dropdown>
+                                </div>
+                                <p-table #dt name="dt" styleClass="p-datatable-gridlines"
+                                    [columns]="cameraLiveDetailsCols" [value]="cameraLiveDetailsData" [rows]="50"
+                                    [rowsPerPageOptions]="[10,20,30,40,50,100]" [paginator]="true" [responsive]="true"
+                                    autoLayout="true" [loading]="loading" exportFilename="CAMERA_STATUS_REPORT">
+                                    <ng-template pTemplate="header" let-columns>
+                                        <tr style="text-align: center;">
+                                            <th>S.No</th>
+                                            <th *ngFor="let col of columns" pSortableColumn="{{col.field}}">
+                                                {{col.header}}
+                                                <p-sortIcon field="{{col.field}}">
+                                                </p-sortIcon>
+                                            </th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-rowData let-columns="columns"
+                                        let-rowIndex="rowIndex">
+                                        <tr [pSelectableRow]="rowData" (dblclick)="onRowSelect(rowData, rowIndex, f)">
+                                            <td>{{rowIndex + 1 | number}}</td>
+                                            <td *ngFor="let col of columns">
+                                                {{rowData[col.field]}}
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                    </p-dialog>
+                </form>
+                <div class="p-col-12" style="font-size: 15px;">
+                    <span style="text-decoration:underline;"> This form will help you to register camera status:
+                    </span><br />
+                    * User should select the Region & District of shop<br />
+                    * User should select the particular Shop Number to update or insert live details<br />
+                    * User should select whether the shop is 'Active' or 'InAcitve'<br />
+                    * User must tell the reason for shop Inactive in 'Remarks' text box<br />
+                    * User can submit the form after filled all the mandatory fields to reflect the details in live
+                    status<br />
+                </div>
+            </p-panel>
+        </div>
+    </div>
+    <app-footer></app-footer>
+</body>

@@ -1,0 +1,170 @@
+<body class="home-bg">
+    <div class="p-grid card page-content border-color">
+        <div class="p-col-12 p-md-12 p-lg-12 no-pad">
+            <app-topbar></app-topbar>
+        </div>
+        <div class="p-col-12 p-md-12 p-lg-12 border-color" style="min-height:450px;">
+            <p-panel>
+                <p-header>
+                    <div class="ui-g panel-header">New Ticket
+                        <!-- <div class="ui-g-12" style="float: right;">Reporter - Subash</div> -->
+                    </div>
+                </p-header>
+                <p-toast position="top-center" key="t-err"></p-toast>
+                <p style="text-align: center;">
+                    Before reporting a Ticket, Please read the User manual document. Page No.6, Index: 4.1
+                </p>
+                <div class="p-grid card border-green" style="padding-left: 15px;">
+                    <!-- <div class="p-col-12 p-md-4 p-lg-1"></div> -->
+                    <div class="p-col-12 p-md-4 p-lg-2">
+                        <div>
+                            <label for="loc" class="label-text-color">Location<span
+                                    class="form-mandatory-field">*</span></label>
+                        </div>
+                        <p-dropdown #loc name="loc" [options]="locationOptions"
+                            [style]="{'width':'-webkit-fill-available'}" [(ngModel)]="location"
+                            (onClick)="onSelect('L')" (onChange)="onResetFields('L')" optionLabel="label" required>
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle">{{item.label}}</span>
+                            </ng-template>
+                        </p-dropdown>
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-2">
+                        <div>
+                            <label for="rname" class="label-text-color">Regional Office<span *ngIf="!disableRM"
+                                    class="form-mandatory-field">*</span></label>
+                        </div>
+                        <p-dropdown #reg name="rname" [options]="regionOptions"
+                            [style]="{'width':'-webkit-fill-available'}" [(ngModel)]="rcode" (onClick)="onSelect('R')"
+                            (onChange)="onResetFields('RM')" filter="true" resetFilterOnHide="true"
+                            filterMatchMode="startsWith" [disabled]="disableRM" optionLabel="label" required>
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle">{{item.label}}</span>
+                            </ng-template>
+                        </p-dropdown>
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-2">
+                        <div>
+                            <label for="dname" class="label-text-color">District Office<span *ngIf="!disableDM"
+                                    class="form-mandatory-field">*</span></label>
+                        </div>
+                        <p-dropdown #dist name="dname" [options]="districtOptions"
+                            [style]="{'width':'-webkit-fill-available'}" [(ngModel)]="dcode" (onClick)="onSelect('D')"
+                            filter="true" resetFilterOnHide="true" filterMatchMode="startsWith" [disabled]="disableDM"
+                            optionLabel="label" required>
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle">{{item.label}}</span>
+                            </ng-template>
+                        </p-dropdown>
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-2">
+                        <div>
+                            <label class="label-text-color" for="shopcd">Shop Number<span *ngIf="!disableShop"
+                                    class="form-mandatory-field">*</span></label>
+                        </div>
+                        <p-dropdown #shop name="shopcd" [disabled]="disableShop" [options]="shopOptions"
+                            [style]="{'width':'-webkit-fill-available'}" [(ngModel)]="shopCode" filter="true"
+                            (onClick)="onSelect('S')" resetFilterOnHide="true" filterMatchMode="startsWith"
+                            optionLabel="label" required>
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle">{{item.label}}</span>
+                            </ng-template>
+                        </p-dropdown>
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-2">
+                        <div>
+                            <label for="comp" class="label-text-color">Component
+                                <span class="form-mandatory-field">*</span>
+                            </label>
+                        </div>
+                        <p-dropdown #comp name="comp" [disabled]="!location" [options]="componentOptions"
+                            [style]="{'width':'-webkit-fill-available'}" [(ngModel)]="compId" filter="true"
+                            (onClick)="onSelect('C')" (ngModelChange)="onChangeComponent()" resetFilterOnHide="true"
+                            optionLabel="label" filterMatchMode="startsWith" required>
+                        </p-dropdown>
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-1"></div>
+                    <div class="p-col-12 p-md-4 p-lg-1"></div>
+                    <div style="padding-top: 1rem;" class="p-col-12 p-md-4 p-lg-2">
+                        <span class="p-float-label">
+                            <input class="p-col-12" id="float-input" size="30" pInputText [(ngModel)]="Assignee"
+                                type="text" autocomplete="off" tabindex="3">
+                            <label for="float-input">Assignee<span class="form-mandatory-field">*</span></label>
+                        </span>
+                    </div>
+                    <div style="padding-top: 1rem;" class="p-col-12 p-md-4 p-lg-2">
+                        <div class="p-float-label">
+                            <input class="p-col-12" id="float-input" size="30" pInputText [(ngModel)]="DefaultTo"
+                                type="text" autocomplete="off" [readonly]=true tabindex="3">
+                            <label for="float-input">Default To<span class="form-mandatory-field">*</span></label>
+                        </div>
+                    </div>
+                    <div style="padding-top: 1rem;" class="p-col-12 p-md-4 p-lg-2">
+                        <div class="p-float-label">
+                            <input class="p-col-12" id="float-input" size="30" pInputText [(ngModel)]="DefaultCC"
+                                type="text" autocomplete="off" tabindex="3">
+                            <label for="float-input">CC (optional)</label>
+                        </div>
+                    </div>
+                    <div style="padding-top: 1rem;" class="p-col-12 p-md-4 p-lg-2">
+                        <div class="p-float-label">
+                            <input class="p-col-12" id="float-input" size="30" pInputText [(ngModel)]="Status"
+                                type="text" autocomplete="off" [readonly]="true" tabindex="3">
+                            <label for="float-input">Status</label>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-1"></div>
+                    <div class="p-col-12 p-md-4 p-lg-1"></div>
+                    <!-- <div class="p-grid"> -->
+                    <!-- <div class="p-col-12 p-md-4 p-lg-2"></div> -->
+                    <div style="padding-top: 1rem;" class="p-col-12 p-md-4 p-lg-4">
+                        <div class="p-float-label">
+                            <textarea [(ngModel)]="ComponentDescription" rows="1" cols="54" pInputTextarea></textarea>
+                            <label for="float-input">Component Description</label>
+                        </div>
+                    </div>
+                    <div style="padding-top: 1rem;" class="p-col-12 p-md-4 p-lg-4">
+                        <div class="p-float-label">
+                            <input class="p-col-12" id="float-input" size="30" pInputText [(ngModel)]="Subject"
+                                type="text" autocomplete="off" tabindex="3">
+                            <label for="float-input">Subject<span class="form-mandatory-field">*</span></label>
+                        </div>
+                    </div>
+                    <!-- </div> -->
+                    <div class="p-col-12 p-md-4 p-lg-6" style="padding-top: 1rem;">
+                        <div class="p-float-label">
+                            <textarea id="float-input" [(ngModel)]="TicketDescription" rows="5" cols="85" pInputTextarea
+                                tabindex="3"></textarea>
+                            <label for="float-input">Ticket Description<span
+                                    class="form-mandatory-field">*</span></label>
+                        </div>
+                    </div>
+                    <div class="p-col-12">
+                        <div class="p-grid">
+                            <div class="p-col-6 p-md-4 p-lg-1 no-pad-top" style="margin-left: 40%;">
+                                <button pButton type="submit" label="Submit" class="p-button-raised p-btn-pad bg-div"
+                                    style="float: right;"
+                                    [disabled]="(!location || !compId || !Assignee || !DefaultTo || !Subject || !TicketDescription)"
+                                    (click)="onSave()"></button>
+                            </div>
+                            <div class="p-col-6 p-md-4 p-lg-1 no-pad-top no-left-pad">
+                                <button pButton type="button" label="Cancel" class="p-button-raised p-btn-pad bg-div"
+                                    icon="" iconPos="right" (click)="onCancel()"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div><br />
+                <div class="p-col-12" style="font-size: 15px;">
+                    <span style="text-decoration:underline;"> This form will help you to create ticket:
+                    </span><br />
+                    * User should select the Location to create the ticket<br />
+                    * User has to select the particular Component<br />
+                    * Subject should be a short description<br />
+                    * Ticket Description should be detail information about the issues<br />
+                    * User can mention the Multiple mail id with comma separator’s in CC<br />
+                </div>
+            </p-panel>
+        </div>
+    </div>
+    <app-footer></app-footer>
+</body>

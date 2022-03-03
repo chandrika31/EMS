@@ -1,0 +1,48 @@
+<div class="p-col-12 p-md-12 p-lg-12 menu-bar border-color" style="height: 38px;">
+  <div class="p-grid" style="margin-left: 82%;">
+    <div class="p-col-6">
+      <a class="menu-a" style="color: white;" routerLink="/login">Logout<i class="pi pi-sign-out"
+          style="padding-left:5px"></i>
+      </a>
+    </div>
+    <div class="p-col-6 padding-gap">
+      <div class="p-grid">
+        <div id="rectangle-green" (click)="setTheme('G')"></div>
+        <div id="rectangle-yellow" (click)="setTheme('Y')"></div>
+        <div id="rectangle-blue" (click)="setTheme('B')"></div>
+        <div id="rectangle-red" (click)="setTheme('R')"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="p-grid" style="height: 80px !important;">
+  <div class="p-col-12 p-md-2 p-lg-2 no-pad-top" style="width: 135px !important;">
+    <div class="p-col-8 no-pad-bottom"
+      style="text-align: center; max-width: 135px !important; width: 135px !important;">
+      <img href="#default" class="logo" src="https://hms.cctv.tasmac.co.in/ems-app/assets/images/header/govt_emblem.png"
+        alt="logo" style="max-width: 135px; max-height: 72px;width: 75px;padding-right: initial; margin-top: -3px;" />
+    </div>
+    <div class="p-col-6 no-pad-top" style="margin-top: -5px;">
+      <img href="#default" class="logo no-pad-top"
+        src="https://hms.cctv.tasmac.co.in/ems-app/assets/images/header/logo.jpg" alt="logo"
+        style="max-width: 120px; max-height: 52px;width: 120px;padding-right: initial;" />
+    </div>
+  </div>
+  <!-- <div class="p-col-1"></div> -->
+  <div class="p-col-12 p-md-6 p-lg-8 no-pad-bottom no-pad-top" style="text-align: center">
+    <div class="header-h1">Tamilnadu State Marketing Corporation Ltd.</div>
+    <div class="header-h2">TASMAC - CCTV SURVEILLANCE SYSTEM - EMS</div>
+    <div class="header-h3">
+      (A Government of Tamilnadu Undertaking)
+    </div>
+  </div>
+  <div class="p-col-12 p-md-2 p-lg-2 header-text no-pad-top no-pad-bottom">
+    <div>
+      CCTV customer care
+    </div>
+    {{tollFreeNumber}}
+  </div>
+</div>
+<div class="p-col-12 p-md-12 p-lg-12 no-pad-left no-pad-right no-pad-bottom" style="padding-top: 22px !important;">
+  <app-menubar></app-menubar>
+</div>

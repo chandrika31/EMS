@@ -1,0 +1,152 @@
+<body class="home-bg">
+  <p-blockUI [blocked]="blockScreen">
+    <p-progressSpinner class="spinner" strokeWidth="4" *ngIf="blockScreen"></p-progressSpinner>
+  </p-blockUI>
+  <div class="p-grid card page-content border-color">
+    <div class="p-col-12 p-md-12 p-lg-12 no-pad">
+      <app-topbar></app-topbar>
+    </div>
+    <p-toast position="top-center" key="t-err"></p-toast>
+    <div class="p-col-12 p-md-12 p-lg-12 border-color" style="min-height: 445px;">
+      <p-panel>
+        <p-header>NMS/SLA Form
+          <div class="ui-g panel-header">
+            <div class="ui-g-12"></div>
+          </div>
+        </p-header>
+        <form #f="ngForm" name="nmsForm">
+          <div class="p-grid card">
+            <!-- row 1 -->
+            <div class="p-col-12 p-md-4 p-lg-2">
+              <div>
+                <label for="loc" class="label-text-color">Issue Location:<span
+                    class="form-mandatory-field">*</span></label>
+              </div>
+              <p-dropdown #loc name="loc" [options]="locationOptions" [style]="{'width':'-webkit-fill-available'}"
+                [(ngModel)]="location" (onClick)="onSelect('L')" (onChange)="onResetFields('L')" required>
+                <ng-template let-item pTemplate="selectedItem">
+                  <span style="vertical-align:middle">{{item.label}}</span>
+                </ng-template>
+              </p-dropdown>
+            </div>
+            <div class="p-col-12 p-md-4 p-lg-2">
+              <div>
+                <label for="rname" class="label-text-color">RM Office:<span *ngIf="!disableRM"
+                    class="form-mandatory-field">*</span></label>
+              </div>
+              <p-dropdown #reg name="rname" [options]="regionOptions" [style]="{'width':'-webkit-fill-available'}"
+                [(ngModel)]="rcode" (onClick)="onSelect('R')" (onChange)="onResetFields('RM')" filter="true"
+                resetFilterOnHide="true" filterMatchMode="startsWith" [disabled]="disableRM" required>
+                <ng-template let-item pTemplate="selectedItem">
+                  <span style="vertical-align:middle">{{item.label}}</span>
+                </ng-template>
+              </p-dropdown>
+            </div>
+            <div class="p-col-12 p-md-4 p-lg-2">
+              <div>
+                <label for="dname" class="label-text-color">DM Office:<span *ngIf="!disableDM"
+                    class="form-mandatory-field">*</span></label>
+              </div>
+              <p-dropdown #dist name="dname" [options]="districtOptions" [style]="{'width':'-webkit-fill-available'}"
+                [(ngModel)]="dcode" (onClick)="onSelect('D')" filter="true" resetFilterOnHide="true"
+                filterMatchMode="startsWith" [disabled]="disableDM" required>
+                <ng-template let-item pTemplate="selectedItem">
+                  <span style="vertical-align:middle">{{item.label}}</span>
+                </ng-template>
+              </p-dropdown>
+            </div>
+            <div class="p-col-12 p-md-4 p-lg-2">
+              <div>
+                <label class="label-text-color" for="shopcd">Shop Number:<span *ngIf="!disableShop"
+                    class="form-mandatory-field">*</span></label>
+              </div>
+              <p-dropdown #shop name="shop" [disabled]="disableShop" [options]="shopOptions"
+                [style]="{'width':'-webkit-fill-available'}" [(ngModel)]="shopCode" filter="true"
+                (onClick)="onSelect('S')" resetFilterOnHide="true" filterMatchMode="startsWith" optionLabel="label"
+                required>
+                <ng-template let-item pTemplate="selectedItem">
+                  <span style="vertical-align:middle">{{item.label}}</span>
+                </ng-template>
+              </p-dropdown>
+            </div>
+            <div class="p-col-12 p-md-4 p-lg-2">
+              <div>
+                <label for="comp" class="label-text-color">Component:<span class="form-mandatory-field">*</span></label>
+              </div>
+              <p-dropdown #comp name="comp" [disabled]="!location" [options]="componentOptions"
+                [style]="{'width':'-webkit-fill-available'}" [(ngModel)]="compId" filter="true"
+                (onClick)="onSelect('C')" resetFilterOnHide="true" filterMatchMode="startsWith" required>
+                <ng-template let-item pTemplate="selectedItem">
+                  <span style="vertical-align:middle">{{item.label}}</span>
+                </ng-template>
+              </p-dropdown>
+            </div>
+            &nbsp;
+            <!-- row 2 -->
+            <div class="p-col-12 p-md-4 p-lg-3 pad-left">
+              <div>
+                <label class="label-text-color" for="type">Type:<span class="form-mandatory-field">*</span></label>
+              </div>
+              <div class="border-grey">
+                <div style="padding-top: 5px;"> &nbsp;
+                  <p-radioButton name="typename" label="Planned" value="1" [(ngModel)]="selectedType" required>
+                  </p-radioButton> &nbsp;&nbsp;
+                  <p-radioButton name="typename" value="2" label="Unplanned" [(ngModel)]="selectedType" required>
+                  </p-radioButton>
+                </div>
+              </div>
+            </div>
+            <div class="p-col-12 p-md-4 p-lg-2">
+              <div>
+                <label for="reasons" class="label-text-color">Reason:</label>
+              </div>
+              <p-dropdown #reason name="reasons" [options]="reasonOptions" [style]="{'width':'-webkit-fill-available'}"
+                [(ngModel)]="reasonId" filter="true" resetFilterOnHide="true" (onClick)="onSelect('RE')"
+                filterMatchMode="startsWith" required>
+                <ng-template let-item pTemplate="selectedItem">
+                  <span style="vertical-align:middle">{{item.label}}</span>
+                </ng-template>
+              </p-dropdown>
+            </div>
+            <div class="p-col-12 p-md-4 p-lg-2">
+              <div>
+                <label class="label-text-color" for="shopcd">From Date:<span
+                    class="form-mandatory-field">*</span></label>
+              </div>
+              <p-calendar name="fDate" [maxDate]="maxDate" dateFormat="dd/mm/yy" [(ngModel)]="fromDate" showTime="true"
+                hourFormat="12" [showIcon]="true" required></p-calendar>
+            </div>
+            <div class="p-col-12 p-md-4 p-lg-2">
+              <div>
+                <label class="label-text-color" for="shopcd">To Date:<span class="form-mandatory-field">*</span></label>
+              </div>
+              <p-calendar class="date-text" name="tDate" dateFormat="dd/mm/yy" [(ngModel)]="toDate"
+                showTime="true" hourFormat="12" [showIcon]="true" required></p-calendar>
+            </div>
+            <!-- row 3 -->
+            <div class="p-col-12 p-md-12 p-lg-12">
+              <div class="p-col-12 p-md-6 p-lg-3 no-pad-left">
+                <div>
+                  <label for="remarks" class="label-text-color">Remarks:<span
+                      class="form-mandatory-field">*</span></label>
+                </div>
+                <textarea class="p-col-10 p-md-10 p-lg-10" [rows]="3" name="remarks" [cols]="28"
+                  [(ngModel)]="remarksTxt" pInputTextarea autoResize="autoResize" required></textarea>
+              </div>
+            </div>
+            <div class="p-col-5"></div>
+            <div class="p-col-1 p-md-1 p-lg-1 no-pad-right" style="text-align: end;">
+              <button pButton type="submit" label="Save" class="p-button-raised p-btn-pad bg-div" (click)="onSave(f)"
+                [disabled]="!f.valid"></button>
+            </div>
+            <!-- <div class="p-col-1 p-md-1 p-lg-1" style="margin-top: 5px;">
+              <button pButton type="button" label="View" class="p-button-raised p-btn-pad bg-div"
+                (click)="onView()"></button>
+            </div> -->
+          </div>
+        </form>
+      </p-panel>
+    </div>
+  </div>
+  <app-footer></app-footer>
+</body>

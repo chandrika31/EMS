@@ -1,0 +1,94 @@
+<body class="home-bg">
+  <div class="p-grid card page-content border-color">
+    <div class="p-col-12 p-md-12 p-lg-12 no-pad">
+      <app-topbar></app-topbar>
+    </div>
+    <div class="p-col-12 p-md-12 p-lg-12 card" style="min-height: 485px;">
+      <p-toast position="top-center" key="msgKey"></p-toast>
+      <p-panel>
+        <p-header>
+          <div class="p-col-12 p-md-12 p-lg-12 no-pad-top">NMS Report</div>
+        </p-header>
+        <div class="p-col-12 no-pad-top">** view NMS details by type wise **</div>
+        <div class="p-col-12 border-color card">
+          <form #f="ngForm" name="fields">
+            <div class="p-grid">
+              <div class="p-col-12 p-md-4 p-lg-2 no-right-pad no-pad-top" style="padding-left: 15px;">
+                <div>
+                  <label class="label-text-color" for="shopcd">From Date:</label>
+                </div>
+                <p-calendar name="fDate" [maxDate]="maxDate" dateFormat="dd/mm/yy" [(ngModel)]="fromDate"
+                  [showIcon]="true" (ngModelChange)="checkValidDateSelection();onChange()"></p-calendar>
+              </div>
+              <div class="p-col-12 p-md-4 p-lg-2 no-pad-top">
+                <div>
+                  <label class="label-text-color" for="shopcd">To Date:</label>
+                </div>
+                <p-calendar name="tDate" [maxDate]="maxDate" dateFormat="dd/mm/yy" [(ngModel)]="toDate"
+                  [showIcon]="true" (ngModelChange)="checkValidDateSelection();onChange()"></p-calendar>
+              </div>
+              <div class="p-col-12 p-md-4 p-lg-2 no-pad-top">
+                <div>
+                  <label for="docType" class="label-text-color">Type:</label>
+                </div>
+                <p-dropdown #doctype name="docType" [options]="typeOptions" [style]="{'width':'190px'}"
+                  [(ngModel)]="type" (onChange)="onChange()" optionLabel="label" required>
+                  <ng-template let-item pTemplate="selectedItem">
+                    <span style="vertical-align:middle">{{item.label}}</span>
+                  </ng-template>
+                </p-dropdown>
+              </div>
+              <div class="p-col-4"></div>
+              <div class="p-col-12 p-md-3 p-lg-1 txt-align" style="margin-top: 20px;">
+                <p-splitButton label="Download" icon="pi pi-download" [disabled]="(nmsData.length==0)" [model]="items">
+                </p-splitButton>
+              </div>
+            </div>
+          </form>
+          <div class="p-col-12 p-md-12 p-lg-12 no-pad-top">
+            <p-table #dt styleClass="p-datatable-gridlines p-datatable-sm" [columns]="nmsCols" [value]="nmsData"
+              [rows]="50" [rowsPerPageOptions]="[10,20,30,40,50,100]" [paginator]="true" [responsive]="true"
+              autoLayout="true" [loading]="loading" [(selection)]="selected" selectionMode="single"
+              exportFilename="NMS_REPORT">
+              <ng-template pTemplate="header" let-columns>
+                <tr style="text-align: center;">
+                  <th *ngFor="let col of columns">
+                    {{col.header}}
+                  </th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+                <tr [pSelectableRow]="rowData" (dblclick)="onRowSelect(rowData, rowIndex)">
+                  <td *ngFor="let col of columns">
+                    {{rowData[col.field]}}
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </div>
+      </p-panel>
+      <p-dialog #dialog id="dialog" header="Confirmation!" class="card" [(visible)]="showDialog"
+        [style]="{width: '50vw'}" [modal]="true" [resizable]="false" [baseZIndex]="10000"
+        icon="pi pi-exclamation-triangle">
+        <div class="padding-gap" style="padding-bottom: 10px;">Do you want to close the document ?</div>
+        <div class="p-col-8 p-md-8 p-lg-8 no-right-pad border-color" style="height: 8vw;">
+          <div style="padding-left: 24%;">
+            <label class="label-text-color" for="cDate">Closed Date:</label>
+          </div>
+          <div class="txt-align">
+            <p-calendar name="cDate" [maxDate]="maxDate" dateFormat="dd/mm/yy" [(ngModel)]="closedDate" showTime="true"
+              hourFormat="12" [showIcon]="true" appendTo="dialog"></p-calendar>
+          </div>
+        </div>
+        <ng-template pTemplate="footer">
+          <button pButton (click)="onUpdate()" label="Ok" style="padding-bottom: 5px;
+          padding-top: 5px;"></button>
+          <button pButton (click)="onCancel()" label="Cancel" style="padding-bottom: 5px;
+          padding-top: 5px;"></button>
+        </ng-template>
+      </p-dialog>
+    </div>
+  </div>
+  <app-footer></app-footer>
+</body>

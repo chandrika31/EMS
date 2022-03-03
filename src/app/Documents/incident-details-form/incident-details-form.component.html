@@ -1,0 +1,113 @@
+<body class="home-bg">
+    <p-blockUI [blocked]="blockScreen">
+        <p-progressSpinner class="spinner" strokeWidth="4" *ngIf="blockScreen"></p-progressSpinner>
+    </p-blockUI>
+    <div class="p-grid card page-content border-color">
+        <div class="p-col-12 p-md-12 p-lg-12 no-pad">
+            <app-topbar></app-topbar>
+        </div>
+        <p-toast position="top-center" key="t-err"></p-toast>
+        <div class="p-col-12 p-md-12 p-lg-12 border-color" style="min-height: 445px;">
+            <p-panel>
+                <p-header>Incident Details Form
+                    <div class="ui-g panel-header">
+                        <div class="ui-g-12"></div>
+                    </div>
+                </p-header>
+                <form #f="ngForm" name="incidentForm">
+                    <div class="p-grid card">
+                        <!-- row 1 -->
+                        <div class="p-col-12 p-md-4 p-lg-2">
+                            <div>
+                                <label for="rname" class="label-text-color">Region:</label>
+                            </div>
+                            <p-dropdown #reg name="rname" [options]="regionOptions"
+                                [style]="{'width':'-webkit-fill-available'}" [(ngModel)]="rcode"
+                                (onClick)="onSelect('RM')" (onChange)="onResetFields('RM')" filter="true"
+                                resetFilterOnHide="true" filterMatchMode="startsWith" required>
+                                <ng-template let-item pTemplate="selectedItem">
+                                    <span style="vertical-align:middle">{{item.label}}</span>
+                                </ng-template>
+                            </p-dropdown>
+                        </div>
+                        <div class="p-col-12 p-md-4 p-lg-2">
+                            <div>
+                                <label for="dname" class="label-text-color">District:</label>
+                            </div>
+                            <p-dropdown #dist name="dname" [options]="districtOptions"
+                                [style]="{'width':'-webkit-fill-available'}" [(ngModel)]="dcode"
+                                (onClick)="onSelect('DM')" filter="true" resetFilterOnHide="true"
+                                filterMatchMode="startsWith" (onChange)="onResetFields('DM')" required>
+                                <ng-template let-item pTemplate="selectedItem">
+                                    <span style="vertical-align:middle">{{item.label}}</span>
+                                </ng-template>
+                            </p-dropdown>
+                        </div>
+                        <div class="p-col-12 p-md-4 p-lg-2">
+                            <div>
+                                <label class="label-text-color" for="shopcd">Shop Number:</label>
+                            </div>
+                            <p-dropdown #shop name="shop" [options]="shopOptions"
+                                [style]="{'width':'-webkit-fill-available'}" [(ngModel)]="shopCode" filter="true"
+                                (onClick)="onSelect('SH')" resetFilterOnHide="true" filterMatchMode="startsWith"
+                                optionLabel="label" required>
+                                <ng-template let-item pTemplate="selectedItem">
+                                    <span style="vertical-align:middle">{{item.label}}</span>
+                                </ng-template>
+                            </p-dropdown>
+                        </div>
+                        <div class="p-col-12 p-md-4 p-lg-2">
+                            <div>
+                                <label class="label-text-color" for="shopcd">Incident Date:</label>
+                            </div>
+                            <p-calendar name="t-date" [maxDate]="maxDate" dateFormat="dd/mm/yy" [(ngModel)]="date"
+                                showTime="true" hourFormat="12" [showIcon]="true" required></p-calendar>
+                        </div>
+                        &nbsp;
+                        <!-- row 2 -->
+                        <div class="p-col-12 p-md-4 p-lg-2">
+                            <div>
+                                <label for="reasons" class="label-text-color">Reason:</label>
+                            </div>
+                            <p-dropdown #reg name="reasons" [options]="reasonOptions"
+                                [style]="{'width':'-webkit-fill-available'}" [(ngModel)]="reason" filter="true"
+                                resetFilterOnHide="true" (onClick)="onSelect('RE')" filterMatchMode="startsWith"
+                                required>
+                                <ng-template let-item pTemplate="selectedItem">
+                                    <span style="vertical-align:middle">{{item.label}}</span>
+                                </ng-template>
+                            </p-dropdown>
+                        </div>
+                        <!-- row 3 -->
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <div>
+                                <label for="remarks" class="label-text-color">Remarks:</label>
+                            </div>
+                            <textarea class="p-col-12 p-md-12 p-lg-12" [rows]="3" name="remarks" [cols]="28"
+                                [(ngModel)]="remarksTxt" pInputTextarea autoResize="autoResize" required></textarea>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <div>
+                                <label class="label-text-color" for="url">Video URL:</label>
+                            </div>
+                            <input class="p-col-12" name="url" type="url" pInputText [(ngModel)]="urlPath"
+                                autocomplete="off" style="text-decoration: underline; color: rgb(116, 116, 255);"
+                                required>
+                            <!-- (change)="onFileUpload($event)" -->
+                        </div>
+                        <div class="p-col-12 p-md-12 p-lg-12 no-pad-top">
+                            **Dear users please update the video file Google drive before submitting the URL
+                        </div>
+                        <div class="p-col-12 p-md-12 p-lg-12">
+                            <div class="p-col-12 p-md-12 p-lg-12 txt-align" style="margin-top: 5px;">
+                                <button pButton type="submit" label="Save" class="p-button-raised p-btn-pad bg-div"
+                                    (click)="onSave(f)" [disabled]="!f.valid"></button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </p-panel>
+        </div>
+    </div>
+    <app-footer></app-footer>
+</body>

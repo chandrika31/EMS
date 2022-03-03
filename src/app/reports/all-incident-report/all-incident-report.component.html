@@ -1,0 +1,44 @@
+<body class="home-bg">
+    <div class="p-col-12 p-md-12 p-lg-12 no-pad page-content border-color">
+      <div class="p-col-12 p-md-12 p-lg-12 no-pad">
+        <app-topbar></app-topbar>
+      </div>
+      <div class="p-col-12 p-md-12 p-lg-12" style="min-height: 485px;">
+        <p-panel>
+          <p-header>
+            <div class="p-col-12 p-md-12 p-lg-12 no-pad-top">Incident Status Report</div>
+          </p-header>
+            <div class="p-col-12 no-pad-top">
+              ** All the incidents reported so far **
+             <button pButton type="button" label="Excel" 
+             style="float: right; margin-top: -10px;" icon="pi pi-download" (click)="dt.exportCSV()"></button>
+            </div>
+          <div class="p-col-12 p-md-12 p-lg-12 no-pad-top">
+            <p-table #dt styleClass="p-datatable-gridlines" [columns]="incidentCols" [value]="incidentData" [rows]="50"
+              [rowsPerPageOptions]="[10,20,30,40,50,100]" [paginator]="true" [responsive]="true" autoLayout="true"
+              [loading]="loading" exportFilename="INCIDENT_STATUS_REPORT">
+              <ng-template pTemplate="header" let-columns>
+                <tr style="text-align: center;">
+                  <th>S.No</th>
+                  <th *ngFor="let col of columns" pSortableColumn="{{col.field}}">
+                    {{col.header}}
+                    <p-sortIcon field="{{col.field}}">
+                    </p-sortIcon>
+                  </th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+                <tr>
+                  <td>{{rowIndex + 1 | number}}</td>
+                  <td *ngFor="let col of columns">
+                    {{rowData[col.field]}}
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </p-panel>
+      </div>
+    </div>
+    <app-footer></app-footer>
+  </body>
